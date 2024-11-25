@@ -6,74 +6,124 @@
 /*   By: brandebr <brandebr@42barcelona.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:11:05 by brandebr          #+#    #+#             */
-/*   Updated: 2024/11/25 13:28:04 by brandebr         ###   ########.fr       */
+/*   Updated: 2024/11/25 17:53:08 by brandebr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
+#include <iomanip>
+#include <cstdlib>
 #include <vector>
-#include "easyfind.hpp"
-#include <unistd.h>
+#include <list>
+#include <limits>
+#include "Span.hpp"
 
 #define RESET   "\033[0m"
 #define BOLD     "\033[1m"
-#define RED_BACKGROUND "\033[41m"
 #define RED     "\033[31m"
-#define BOLD_RED "\033[31m"
 #define GREEN   "\033[32m"
-#define YELLOW  "\033[1;33m"
+#define YELLOW  "\033[33m"
 #define BLUE    "\033[34m"
 #define MAGENTA "\033[35m"
 #define CYAN    "\033[36m"
-#define WHITE   "\033[37m"
 
-
-int main() {
-	std::vector<int> myVector;
-	std::cout << CYAN << BOLD << "🚀 Launching the Vector Search Experiment... 🎯\n" << RESET;
-	sleep(1);
-	myVector.push_back(5);
-	myVector.push_back(20);
-	myVector.push_back(30);
-	myVector.push_back(60);
-	myVector.push_back(50);
-	std::cout << BLUE << "We've got a vector full of numbers: {5, 20, 30, 60, 50}.\n" << RESET;
-	sleep(1);
-
-	std::cout << YELLOW << "⏳ Let's begin the hunt! Looking for 10... It should give us an error. 🤔\n" << RESET;
-	sleep(1);
-	try {
-		std::vector<int>::iterator it = easyfind(myVector, 10);
-		int position = it - myVector.begin();
-		std::cout << GREEN << "🎉 Found it! But wait, how? We shouldn't have... It was found at position " << position << RESET << std::endl;
-	} catch (const std::exception &e) {
-		std::cerr << RED << "💥 Oops! " << e.what() << RESET << std::endl;
-	}
-	sleep(1);
-
-	std::cout << YELLOW << "🔍 Searching for 30... It should be found at position 2 (third spot)!\n" << RESET;
-	sleep(1);
-	try {
-		std::vector<int>::iterator it = easyfind(myVector, 30);
-		int position = it - myVector.begin();
-		std::cout << GREEN << "🎉 Success! The number 30 is chilling at position " << position << " (a.k.a. the 3rd position)!" << RESET << std::endl;
-	} catch (const std::exception &e) {
-		std::cerr << RED << "💥 Oops! " << e.what() << RESET << std::endl;
-	}
-
-	sleep(1);
-	std::cout << YELLOW << "🧐 Searching for 50... Surely it's here... let's see!\n" << RESET;
-	sleep(1);
-	try {
-		std::vector<int>::iterator it = easyfind(myVector, 50);
-		int position = it - myVector.begin();
-		std::cout << GREEN << "🎉 Found it! Number 50 is sitting comfortably at position " << position << " (fifth place)!" << RESET << std::endl;
-	} catch (const std::exception &e) {
-		std::cerr << RED << "💥 Oops! " << e.what() << RESET << std::endl;
-	}
-	sleep(1);
-
-	std::cout << BLUE << "🚀 All searches complete! Thanks for joining the Vector Adventure! 🌟\n" << RESET;
-	return 0;
+void printTestHeader(const std::string& header) {
+    std::cout << std::endl << MAGENTA << BOLD << header << RESET << std::endl;
+    std::cout << std::string(header.length(), '=') << std::endl;
 }
 
+int main() {
+	std::cout << "\033[2J\033[1;1H";
+    srand(time(0));
+
+    printTestHeader("TEST 1: Basic Functionality");
+    Span span1(5);
+    try {
+        span1.addNumber(3);
+        span1.addNumber(9);
+        span1.addNumber(17);
+        span1.addNumber(11);
+        span1.addNumber(7);
+        std::cout << GREEN << "Expected Shortest: 2 | Expected Longest: 14" << RESET << std::endl;
+        std::cout << GREEN << "Shortest: " << span1.shortestSpan() << " | Longest: " << span1.longestSpan() << RESET << std::endl << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << RED << e.what() << RESET << std::endl << std::endl;
+    }
+
+    // Test 2: Overflow
+    printTestHeader("TEST 2: Overflow Test");
+    Span span2(2);
+    try {
+        span2.addNumber(1);
+        span2.addNumber(2);
+        span2.addNumber(3); // Should throw
+    } catch (const std::exception& e) {
+        std::cout << YELLOW << "Expected Error: Vector overflow" << RESET << std::endl;
+        std::cout << e.what() << RESET << std::endl << std::endl;
+    }
+
+    // Test 3: Not Enough Numbers
+    printTestHeader("TEST 3: Not Enough Numbers");
+    Span span3(2);
+    try {
+        span3.addNumber(42);
+        std::cout << YELLOW << "Expected Error: At least 2 numbers required" << RESET << std::endl;
+        std::cout << GREEN << "Shortest: " << span3.shortestSpan() << RESET << std::endl; // Should throw
+    } catch (const std::exception& e) {
+        std::cout << e.what() << RESET << std::endl << std::endl;
+    }
+
+    // Test 4: Large Range with addRange
+    printTestHeader("TEST 4: Large Range Addition");
+    Span span4(10000);
+    std::vector<int> numbers(10000);
+    for (size_t i = 0; i < numbers.size(); ++i)
+        numbers[i] = i;
+    try {
+        span4.addRange(numbers.begin(), numbers.end());
+        std::cout << GREEN << "Expected Shortest: 1 | Expected Longest: 9999" << RESET << std::endl;
+        std::cout << GREEN << "Shortest: " << span4.shortestSpan() << " | Longest: " << span4.longestSpan() << RESET << std::endl << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << RED << "Error: " << e.what() << RESET << std::endl;
+    }
+
+    // Test 5: Negative Numbers
+    printTestHeader("TEST 5: Negative Numbers");
+    Span span5(5);
+    try {
+        span5.addNumber(-3);
+        span5.addNumber(17);
+        span5.addNumber(9);
+        span5.addNumber(-11);
+        span5.addNumber(1);
+        std::cout << GREEN << "Expected Shortest: 4 | Expected Longest: 28" << RESET << std::endl;
+        std::cout << GREEN << "Shortest: " << span5.shortestSpan() << " | Longest: " << span5.longestSpan() << RESET << std::endl << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << RED << "Error: " << e.what() << RESET << std::endl;
+    }
+
+    // Test 6: Extreme Numbers
+    printTestHeader("TEST 6: Extreme Values");
+    Span span6(2);
+    try {
+        span6.addNumber(std::numeric_limits<int>::min());
+        span6.addNumber(std::numeric_limits<int>::max());
+        std::cout << GREEN << "Expected Shortest: 4294967295 | Expected Longest: 4294967295" << RESET << std::endl;
+        std::cout << GREEN << "Shortest: " << span6.shortestSpan() << " | Longest: " << span6.longestSpan() << RESET << std::endl << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << RED << "Error: " << e.what() << RESET << std::endl;
+    }
+
+    // Test 7: Random Values
+    printTestHeader("TEST 7: Random Values");
+    Span span7(1000);
+    try {
+        for (int i = 0; i < 1000; ++i)
+            span7.addNumber(rand() % 10000);
+        std::cout << GREEN << "Shortest: " << span7.shortestSpan() << " | Longest: " << span7.longestSpan() << RESET << std::endl << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << RED << "Error: " << e.what() << RESET << std::endl;
+    }
+
+    return 0;
+}

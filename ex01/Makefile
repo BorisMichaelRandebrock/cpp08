@@ -6,13 +6,13 @@
 #    By: brandebr <brandebr@42barcelona.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/25 12:26:46 by brandebr          #+#    #+#              #
-#    Updated: 2024/11/25 13:27:08 by brandebr         ###   ########.fr        #
+#    Updated: 2024/11/25 16:08:49 by brandebr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME =  Easy_find
+NAME = Span 
 
-SRC = main.cpp   
+SRC = main.cpp Span.cpp   
 
 SRC_P = src/
 
@@ -20,7 +20,7 @@ OBJ_DIR = obj/
 
 INC_DIR = inc/
 
-HEADERS = $(addprefix $(INC_DIR),  easyfind.hpp)
+HEADERS = $(addprefix $(INC_DIR),  Span.hpp)
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.cpp=.o))
 
