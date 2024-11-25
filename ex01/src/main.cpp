@@ -6,7 +6,7 @@
 /*   By: brandebr <brandebr@42barcelona.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:11:05 by brandebr          #+#    #+#             */
-/*   Updated: 2024/11/25 17:53:08 by brandebr         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:00:34 by brandebr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 
 void printTestHeader(const std::string& header) {
     std::cout << std::endl << MAGENTA << BOLD << header << RESET << std::endl;
-    std::cout << std::string(header.length(), '=') << std::endl;
+    std::cout << std::string(header.length(), '*') << std::endl;
 }
 
 int main() {
@@ -45,7 +45,7 @@ int main() {
         span1.addNumber(11);
         span1.addNumber(7);
         std::cout << GREEN << "Expected Shortest: 2 | Expected Longest: 14" << RESET << std::endl;
-        std::cout << GREEN << "Shortest: " << span1.shortestSpan() << " | Longest: " << span1.longestSpan() << RESET << std::endl << std::endl;
+        std::cout << YELLOW << "Shortest: " << GREEN << span1.shortestSpan() << YELLOW << " Longest: " << GREEN << span1.longestSpan() << RESET << std::endl << std::endl;
     } catch (const std::exception& e) {
         std::cout << RED << e.what() << RESET << std::endl << std::endl;
     }
@@ -68,7 +68,7 @@ int main() {
     try {
         span3.addNumber(42);
         std::cout << YELLOW << "Expected Error: At least 2 numbers required" << RESET << std::endl;
-        std::cout << GREEN << "Shortest: " << span3.shortestSpan() << RESET << std::endl; // Should throw
+        std::cout << YELLOW << "Shortest: " << GREEN << span3.shortestSpan() << RESET << std::endl; // Should throw
     } catch (const std::exception& e) {
         std::cout << e.what() << RESET << std::endl << std::endl;
     }
@@ -82,7 +82,7 @@ int main() {
     try {
         span4.addRange(numbers.begin(), numbers.end());
         std::cout << GREEN << "Expected Shortest: 1 | Expected Longest: 9999" << RESET << std::endl;
-        std::cout << GREEN << "Shortest: " << span4.shortestSpan() << " | Longest: " << span4.longestSpan() << RESET << std::endl << std::endl;
+        std::cout << YELLOW << "Shortest: " << GREEN << span4.shortestSpan() << YELLOW << " Longest: " << GREEN << span4.longestSpan() << RESET << std::endl << std::endl;
     } catch (const std::exception& e) {
         std::cout << RED << "Error: " << e.what() << RESET << std::endl;
     }
@@ -97,7 +97,7 @@ int main() {
         span5.addNumber(-11);
         span5.addNumber(1);
         std::cout << GREEN << "Expected Shortest: 4 | Expected Longest: 28" << RESET << std::endl;
-        std::cout << GREEN << "Shortest: " << span5.shortestSpan() << " | Longest: " << span5.longestSpan() << RESET << std::endl << std::endl;
+        std::cout << YELLOW << "Shortest: " << GREEN << span5.shortestSpan() << YELLOW <<" Longest: " << GREEN << span5.longestSpan() << RESET << std::endl << std::endl;
     } catch (const std::exception& e) {
         std::cout << RED << "Error: " << e.what() << RESET << std::endl;
     }
@@ -109,7 +109,7 @@ int main() {
         span6.addNumber(std::numeric_limits<int>::min());
         span6.addNumber(std::numeric_limits<int>::max());
         std::cout << GREEN << "Expected Shortest: 4294967295 | Expected Longest: 4294967295" << RESET << std::endl;
-        std::cout << GREEN << "Shortest: " << span6.shortestSpan() << " | Longest: " << span6.longestSpan() << RESET << std::endl << std::endl;
+        std::cout << YELLOW << "Shortest: " << GREEN << span6.shortestSpan() << YELLOW << " Longest: " << GREEN << span6.longestSpan() << RESET << std::endl << std::endl;
     } catch (const std::exception& e) {
         std::cout << RED << "Error: " << e.what() << RESET << std::endl;
     }
@@ -118,7 +118,7 @@ int main() {
     printTestHeader("TEST 7: Random Values");
     Span span7(1000);
     try {
-        for (int i = 0; i < 1000; ++i)
+        for (int i = 0; i < 10; ++i)
             span7.addNumber(rand() % 10000);
         std::cout << GREEN << "Shortest: " << span7.shortestSpan() << " | Longest: " << span7.longestSpan() << RESET << std::endl << std::endl;
     } catch (const std::exception& e) {
